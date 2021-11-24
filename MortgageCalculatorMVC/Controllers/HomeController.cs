@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using MortgageCalculatorMVC.Helpers;
 
 namespace MortgageCalculatorMVC.Controllers
 {
@@ -23,6 +24,8 @@ namespace MortgageCalculatorMVC.Controllers
             return View();
         }
 
+        // GET App HTTP filter
+        [HttpGet]
         public IActionResult App()
         {
             // Create an instance of the loan model, set defaults to what you whant, pass to this App view
@@ -37,10 +40,21 @@ namespace MortgageCalculatorMVC.Controllers
             return View(loan);
         }
 
-        public IActionResult Privacy()
+        // POST App HTTP filter, i.e. take in and process user-submitted data and return the results
+        [HttpPost]
+        [AutoValidateAntiforgeryToken] // Form validation security
+        public IActionResult App(Loan loan) // Input user-defined loan criteria model as App() parameter
         {
-            return View();
-        }
+            // Calculate monthly loan payment details
+            // Create an instance of LoanHelper
+            var loanHelper = new LoanHelper();
+
+            // Call GetPayments method, pass in loan parameter, assign results to a new Loan model
+            Loan newLoan = loanHelper.GetPayments(loan);
+            
+            // Return the new loan model
+            return View(newLoan);
+        }       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
