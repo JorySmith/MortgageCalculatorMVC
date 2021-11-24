@@ -69,7 +69,7 @@ namespace MortgageCalculatorMVC.Helpers
             var amountD = Convert.ToDouble(amount);
 
             // Calculate monthly payment
-            var paymentD = (amountD * rateD) / (1 - Math.Pow(1 + rateD, term));
+            var paymentD = (amountD * rateD) / (1 - Math.Pow(1 + rateD, -term));
 
             // Return total payment converted to decimal
             return Convert.ToDecimal(paymentD);
