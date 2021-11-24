@@ -1,0 +1,104 @@
+﻿@* Import loan model *@
+@model MortgageCalculatorMVC.Models.Loan
+
+
+@{
+}
+
+<div class="container">
+    <h1 class="mb-2">Mortgage Loan Calculator</h1>
+
+    <div class="row">
+        <div class="col">
+            @* Form for getting user-defined loan criteria *@
+            <form asp-controller="Home" asp-action="App" method="post">
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        @* Label for model Amount, ensure asp-for reflects that *@
+                        <label class="" asp-for="Amount">Loan Amount:</label>
+                        @* Input for model Amount, ensure asp-for reflects that and value=@Model.Amount *@
+                        <input type="number" class="form-control" id="lamount" asp-for="Amount" value=@Model.Amount min="1000" step="500" />
+                    </div>
+                    <div class="form-group col-12">
+                        @* Label for model Amount, ensure asp-for reflects that *@
+                        <label class="" asp-for="Term">Term:</label>
+                        @* Input for model Term, ensure asp-for reflects that and value=@Model.Term *@
+                        <input type="number" class="form-control" id="lterm" asp-for="Term" value=@Model.Term min="1" step="1" />
+                    </div>
+                    <div class="form-group col-12">
+                        @* Label for model Amount, ensure asp-for reflects that *@
+                        <label class="" asp-for="Rate">Interest Rate:</label>
+                        @* Input for model Rate, ensure asp-for reflects that and value=@Model.Rate *@
+                        <input type="number" class="form-control" id="lrate" asp-for="Rate" value=@Model.Rate min="1" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-dark mt-2">Calculate</button>
+            </form>
+        </div>
+        <div class="col">
+            @* Monthly payment information *@
+            <div id="paymentTitle">
+                <p>Your Monthly Payments</p>
+            </div>
+            @* Monthly payment total *@
+            <p id="payment">
+                @Model.Payment.ToString("C")
+            </p>
+            @* Row of total principal, interest, and cost *@
+            <div class="row">
+                <div class="col-6">
+                    <label class="text-left">Total Principal</label>
+                </div>
+                <div class="col-6 text-right" id="totalPrincipal">
+                    @Model.Amount.ToString("C")
+                </div>
+                <div class="col-6">
+                    <label class="text-left">Total Interest</label>
+                </div>
+                <div class="col-6 text-right" id="totalInterest">
+                    @Model.TotalInterest.ToString("C")
+                </div>
+                <div class="col-6">
+                    <label class="text-left">Total Cost</label>
+                </div>
+                <div class="col-6 text-right" id="totalCost">
+                    @Model.TotalCost.ToString("C")
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Only display calculated monthly loan payment data if the user submitted data to the Loan model *@
+    @if (Model.Payments.Count > 0)
+    {
+        <div class="row">
+            <div class="col">
+                <table id="scheduleTable" class="table-striped table-hover">
+                    <thead class="text-white">
+                        <tr>
+                            <th>Month</th>
+                            <th>Payment</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Total Interest Paid</th>
+                            <th>Balance Remaining</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Payments)
+                        {
+                        <tr>
+                            <td>@item.Month</td>
+                            <td>@item.MonthlyPrincipal</td>
+                            <td>@item.MonthlyInterest</td>
+                            <td>@item.TotalInterest</td>
+                            <td>@item.Balance</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+
+</div>
